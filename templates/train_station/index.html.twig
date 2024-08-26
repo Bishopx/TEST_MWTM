@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello TrainStationController!{% endblock %}
+
+{% block body %}
+<div class="wrapper">
+
+    <div>
+        <form id="searchBar" action="{{ path('app_train_station') }}" method="GET">
+            <select class="custom_field" name="category">
+                <option value="">-- Veuillez sélectionner une catégorie --</option>
+                {% for categorie in categories %}
+                    <option value="{{ categorie }}">{{ categorie }}</option>
+                {% endfor %}
+            </select>
+
+            <input class="custom_field" type="text" name="search" placeholder="Votre recherche">
+
+            <button class="custom_button" type="submit">Rechercher</button>
+            <a class="custom_link" href="{{ path('app_train_station') }}" >Réinitialiser</a>
+        </form>
+    </div>
+
+    {% if totalPages > 1 %}
+        <div class="pagination">
+            
+            {% for p in 1..totalPages %}
+                <a href="{{ path('app_train_station', {'page': p}) }}" class="{{ p == page ? 'active' : '' }}">{{ p }}</a>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div>
+        <p>
+            Nombre de résultats: {{ data|length }}
+        </p>
+    </div>
+
+    <table class="black_border">
+        <thead>
+            <tr>
+                {% for categorie in categories %}
+                    <th>{{ categorie }}</th>
+                {% endfor %}
+            </tr>
+            
+        </thead>
+        <tbody>
+            {% for row in data %}
+                <tr>
+                    {% for key, value in row %}
+                        {% if key is same as('picto')  %}
+                            <td>
+                                <img class="picto" src="{{ value }}" alt="picto">
+                            </td>
+                        {% else %}
+                            <td>{{ value }}</td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}
